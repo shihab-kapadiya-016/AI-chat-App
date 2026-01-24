@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Conversation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversations')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='conversations')
     title = models.TextField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -17,7 +17,7 @@ class Message(models.Model):
         AI = "AI","AI"
         
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
-    sender = models.ForeignKey(User,related_name='sent_messages',on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='sent_messages',on_delete=models.CASCADE)
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     role = models.CharField(max_length=10,choices=Role.choices,default='user')
